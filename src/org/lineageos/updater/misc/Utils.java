@@ -102,8 +102,8 @@ public class Utils {
             return false;
         }
         if (!update.getType().equalsIgnoreCase(SystemProperties.get(Constants.PROP_RELEASE_TYPE))) {
-            Log.d(TAG, update.getName() + " has type " + update.getType());
-            return false;
+            Log.d(TAG, update.getName() + " has type " + update.getType() + ". Updating across release types");
+            return trye;
         }
         return true;
     }
