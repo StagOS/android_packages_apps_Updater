@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2021 The LineageOS Project
+ * Copyright (C) 2017-2021 The StagOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -151,10 +151,12 @@ public class Utils {
     }
 
     public static String getServerURL(Context context) {
-        String incrementalVersion = SystemProperties.get(Constants.PROP_BUILD_VERSION_INCREMENTAL);
         String device = SystemProperties.get(Constants.PROP_NEXT_DEVICE,
                 SystemProperties.get(Constants.PROP_DEVICE));
-        String type = SystemProperties.get(Constants.PROP_RELEASE_TYPE).toLowerCase(Locale.ROOT);
+        String ziptype = SystemProperties.get(Constants.PROP_ZIP_TYPE).toLowerCase(Locale.ROOT);
+
+        // Fallback to lucid if prop was not found
+        if (ziptype == null) ziptype = "pristine";
 
         String serverUrl = SystemProperties.get(Constants.PROP_UPDATER_URI);
         if (serverUrl.trim().isEmpty()) {
@@ -162,8 +164,7 @@ public class Utils {
         }
 
         return serverUrl.replace("{device}", device)
-                .replace("{type}", type)
-                .replace("{incr}", incrementalVersion);
+                .replace("{ziptype}", ziptype);
     }
 
     public static String getUpgradeBlockedURL(Context context) {
