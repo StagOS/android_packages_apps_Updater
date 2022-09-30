@@ -82,12 +82,13 @@ public class Utils {
     // This should really return an UpdateBaseInfo object, but currently this only
     // used to initialize UpdateInfo objects
     private static UpdateInfo parseJsonUpdate(JSONObject object) throws JSONException {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Update update = new Update();
         update.setTimestamp(object.getLong("datetime"));
         update.setName(object.getString("filename"));
         update.setType(object.getString("romtype"));
         update.setFileSize(object.getLong("size"));
-        if(SystemProperties.getBoolean(Constants.PREF_INCREMENTAL_UPDATES, true)) {
+        if(preferences.getBoolean(Constants.PREF_INCREMENTAL_UPDATES, true)) {
             update.setDownloadId(object.getString("incremental_id"));
             update.setDownloadUrl(object.getString("incremental_url"));
         }else{
