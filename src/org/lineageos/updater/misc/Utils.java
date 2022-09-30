@@ -85,10 +85,15 @@ public class Utils {
         Update update = new Update();
         update.setTimestamp(object.getLong("datetime"));
         update.setName(object.getString("filename"));
-        update.setDownloadId(object.getString("id"));
         update.setType(object.getString("romtype"));
         update.setFileSize(object.getLong("size"));
-        update.setDownloadUrl(object.getString("url"));
+        if(SystemProperties.getBoolean(Constants.PREF_INCREMENTAL_UPDATES, true)) {
+            update.setDownloadId(object.getString("incremental_id"));
+            update.setDownloadUrl(object.getString("incremental_url"));
+        }else{
+            update.setDownloadId(object.getString("id"));
+            update.setDownloadUrl(object.getString("url"));
+        }
         update.setVersion(object.getString("version"));
         return update;
     }
