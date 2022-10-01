@@ -231,19 +231,21 @@ public class UpdatesActivity extends UpdatesListActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.menu_refresh) {
-            downloadUpdatesList(true);
-            return true;
-        } else if (itemId == R.id.menu_preferences) {
-            showPreferencesDialog();
-            return true;
-        } else if (itemId == R.id.menu_show_changelog) {
-            Intent openUrl = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse(Utils.getChangelogURL(this)));
-            startActivity(openUrl);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        switch (itemId) {
+            case R.id.menu_refresh:
+                downloadUpdatesList(true);
+                return true;
+            case R.id.menu_preferences:
+                showPreferencesDialog();
+                return true;
+            case R.id.menu_show_changelog:
+                Intent openUrl = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(Utils.getChangelogURL(this)));
+                startActivity(openUrl);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+            }
     }
 
     @Override
