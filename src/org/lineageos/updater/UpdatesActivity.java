@@ -277,7 +277,7 @@ public class UpdatesActivity extends UpdatesListActivity {
         UpdaterController controller = mUpdaterService.getUpdaterController();
         boolean newUpdates = false;
 
-        List<UpdateInfo> updates = Utils.parseJson(jsonFile, true);
+        List<UpdateInfo> updates = Utils.parseJson(getApplicationContext(), jsonFile, true);
         List<String> updatesOnline = new ArrayList<>();
         for (UpdateInfo update : updates) {
             newUpdates |= controller.addUpdate(update);
@@ -330,7 +330,7 @@ public class UpdatesActivity extends UpdatesListActivity {
             preferences.edit().putLong(Constants.PREF_LAST_UPDATE_CHECK, millis).apply();
             updateLastCheckedString();
             if (json.exists() && Utils.isUpdateCheckEnabled(this) &&
-                    Utils.checkForNewUpdates(json, jsonNew)) {
+                    Utils.checkForNewUpdates(getApplicationContext(), json, jsonNew)) {
                 UpdatesCheckReceiver.updateRepeatingUpdatesCheck(this);
             }
             // In case we set a one-shot check because of a previous failure

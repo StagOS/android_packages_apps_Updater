@@ -81,8 +81,8 @@ public class Utils {
 
     // This should really return an UpdateBaseInfo object, but currently this only
     // used to initialize UpdateInfo objects
-    private static UpdateInfo parseJsonUpdate(JSONObject object) throws JSONException {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+    private static UpdateInfo parseJsonUpdate(Context context, JSONObject object) throws JSONException {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         Update update = new Update();
         update.setTimestamp(object.getLong("datetime"));
         update.setName(object.getString("filename"));
@@ -123,7 +123,7 @@ public class Utils {
                         SystemProperties.get(Constants.PROP_BUILD_VERSION));
     }
 
-    public static List<UpdateInfo> parseJson(File file, boolean compatibleOnly)
+    public static List<UpdateInfo> parseJson(Context context, File file, boolean compatibleOnly)
             throws IOException, JSONException {
         List<UpdateInfo> updates = new ArrayList<>();
 
@@ -141,7 +141,7 @@ public class Utils {
                 continue;
             }
             try {
-                UpdateInfo update = parseJsonUpdate(updatesList.getJSONObject(i));
+                UpdateInfo update = parseJsonUpdate(context, updatesList.getJSONObject(i));
                 if (!compatibleOnly || isCompatible(update)) {
                     updates.add(update);
                 } else {
@@ -210,10 +210,10 @@ public class Utils {
      * @param newJson new update list
      * @return true if newJson has at least a compatible update not available in oldJson
      */
-    public static boolean checkForNewUpdates(File oldJson, File newJson)
+    public static boolean checkForNewUpdates(Context context, File oldJson, File newJson)
             throws IOException, JSONException {
-        List<UpdateInfo> oldList = parseJson(oldJson, true);
-        List<UpdateInfo> newList = parseJson(newJson, true);
+        List<UpdateInfo> oldList = parseJson(context, oldJson, true);
+        List<UpdateInfo> newList = parseJson(context, newJson, true);
         Set<String> oldIds = new HashSet<>();
         for (UpdateInfo update : oldList) {
             oldIds.add(update.getDownloadId());
