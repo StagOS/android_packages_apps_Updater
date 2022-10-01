@@ -85,13 +85,15 @@ public class Utils {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         Update update = new Update();
         update.setTimestamp(object.getLong("datetime"));
-        update.setName(object.getString("filename"));
         update.setType(object.getString("romtype"));
-        update.setFileSize(object.getLong("size"));
         if(preferences.getBoolean(Constants.PREF_INCREMENTAL_UPDATES, true)) {
+            update.setName(object.getString("incremental_filename"));
+            update.setFileSize(object.getLong("incremental_size"));
             update.setDownloadId(object.getString("incremental_id"));
             update.setDownloadUrl(object.getString("incremental_url"));
         }else{
+            update.setName(object.getString("filename"));
+            update.setFileSize(object.getLong("size"));
             update.setDownloadId(object.getString("id"));
             update.setDownloadUrl(object.getString("url"));
         }
@@ -160,6 +162,9 @@ public class Utils {
         String device = SystemProperties.get(Constants.PROP_NEXT_DEVICE,
                 SystemProperties.get(Constants.PROP_DEVICE));
         String type = SystemProperties.get(Constants.PROP_RELEASE_TYPE).toLowerCase(Locale.ROOT);
+        String ziptype = SystemProperties.get(Constants.PROP_ZIP_TYPE).toLowerCase(Locale.ROOT);
+
+        if (ziptype == null) ziptype = "pristine";
 
         String serverUrl = SystemProperties.get(Constants.PROP_UPDATER_URI);
         if (serverUrl.trim().isEmpty()) {
@@ -169,6 +174,7 @@ public class Utils {
         return serverUrl.replace("{device}", device)
                 .replace("{type}", type)
                 .replace("{incr}", incrementalVersion);
+                .replace("{ziptype}", ziptype);
     }
 
     public static String getUpgradeBlockedURL(Context context) {

@@ -15,10 +15,14 @@ a JSON with the following structure:
       "datetime": 1230764400,
       "filename": "ota-package.zip",
       "id": "5eb63bbbe01eeed093cb22bb8f5acdc3",
-      "romtype": "nightly",
       "size": 314572800,
       "url": "https://example.com/ota-package.zip",
-      "version": "15.1"
+      "incremental_filename": "incremnetal-ota-package.zip",
+      "incremental_id": "89udhbbbe01eiout93cb22bb8f586yui",
+      "incremental_size": 3145728,
+      "incremental_url": "https://example.com/incremental-ota-package.zip",
+      "romtype": "beta",
+      "version": "13.0"
     }
   ]
 }
