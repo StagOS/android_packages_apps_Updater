@@ -21,6 +21,7 @@ a JSON with the following structure:
       "incremental_id": "89udhbbbe01eiout93cb22bb8f586yui",
       "incremental_size": 3145728,
       "incremental_url": "https://example.com/incremental-ota-package.zip",
+      "ziptype": "gapps",
       "romtype": "beta",
       "version": "13.0"
     }
