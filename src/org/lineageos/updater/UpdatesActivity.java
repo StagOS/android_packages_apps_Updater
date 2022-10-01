@@ -277,7 +277,7 @@ public class UpdatesActivity extends UpdatesListActivity {
         UpdaterController controller = mUpdaterService.getUpdaterController();
         boolean newUpdates = false;
 
-        List<UpdateInfo> updates = Utils.parseJson(jsonFile, true);
+        List<UpdateInfo> updates = Utils.parseJson(getApplicationContext(), jsonFile, true);
         List<String> updatesOnline = new ArrayList<>();
         for (UpdateInfo update : updates) {
             newUpdates |= controller.addUpdate(update);
@@ -330,7 +330,7 @@ public class UpdatesActivity extends UpdatesListActivity {
             preferences.edit().putLong(Constants.PREF_LAST_UPDATE_CHECK, millis).apply();
             updateLastCheckedString();
             if (json.exists() && Utils.isUpdateCheckEnabled(this) &&
-                    Utils.checkForNewUpdates(json, jsonNew)) {
+                    Utils.checkForNewUpdates(getApplicationContext(), json, jsonNew)) {
                 UpdatesCheckReceiver.updateRepeatingUpdatesCheck(this);
             }
             // In case we set a one-shot check because of a previous failure
@@ -484,6 +484,7 @@ public class UpdatesActivity extends UpdatesListActivity {
         SwitchCompat dataWarning = view.findViewById(R.id.preferences_mobile_data_warning);
         SwitchCompat abPerfMode = view.findViewById(R.id.preferences_ab_perf_mode);
         SwitchCompat updateRecovery = view.findViewById(R.id.preferences_update_recovery);
+        SwitchCompat incrementalUpdate = view.findViewById(R.id.preferences_incremental_update);
 
         if (!Utils.isABDevice()) {
             abPerfMode.setVisibility(View.GONE);
@@ -494,6 +495,7 @@ public class UpdatesActivity extends UpdatesListActivity {
         autoDelete.setChecked(prefs.getBoolean(Constants.PREF_AUTO_DELETE_UPDATES, false));
         dataWarning.setChecked(prefs.getBoolean(Constants.PREF_MOBILE_DATA_WARNING, true));
         abPerfMode.setChecked(prefs.getBoolean(Constants.PREF_AB_PERF_MODE, false));
+        incrementalUpdate.setChecked(prefs.getBoolean(Constants.PREF_INCREMENTAL_UPDATES, true));
 
         if (getResources().getBoolean(R.bool.config_hideRecoveryUpdate)) {
             // Hide the update feature if explicitly requested.
@@ -533,6 +535,8 @@ public class UpdatesActivity extends UpdatesListActivity {
                             .putBoolean(Constants.PREF_AUTO_DELETE_UPDATES, autoDelete.isChecked())
                             .putBoolean(Constants.PREF_MOBILE_DATA_WARNING, dataWarning.isChecked())
                             .putBoolean(Constants.PREF_AB_PERF_MODE, abPerfMode.isChecked())
+                            .putBoolean(Constants.PREF_INCREMENTAL_UPDATES,
+                                    incrementalUpdate.isChecked())
                             .apply();
 
                     if (Utils.isUpdateCheckEnabled(this)) {

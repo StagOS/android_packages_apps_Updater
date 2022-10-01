@@ -60,4 +60,13 @@
         android:layout_marginBottom="16dp"
         android:text="@string/menu_update_recovery"
         android:textSize="16sp" />
+    
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/preferences_incremental_update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/menu_incremental_update"
+        android:textSize="16sp" />
+    
 </LinearLayout>
