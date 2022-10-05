@@ -173,7 +173,7 @@ public class Utils {
 
         return serverUrl.replace("{device}", device)
                 .replace("{type}", type)
-                .replace("{incr}", incrementalVersion);
+                .replace("{incr}", incrementalVersion)
                 .replace("{ziptype}", ziptype);
     }
 
