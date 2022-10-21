@@ -91,6 +91,7 @@ public class UpdatesActivity extends UpdatesListActivity {
     private boolean mIsTV;
 
     private UpdateInfo mToBeExported = null;
+
     private final ActivityResultLauncher<Intent> mExportUpdate = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -99,6 +100,27 @@ public class UpdatesActivity extends UpdatesListActivity {
                     if (intent != null) {
                         Uri uri = intent.getData();
                         exportUpdate(uri);
+                    }
+                }
+            });
+
+    private final ActivityResultLauncher<Intent> mLocalUpdate = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent intent = result.getData();
+                    if (intent != null) {
+                        Uri uri = intent.getData();
+                        if (uri != null) {
+                            File file = new File(uri.getPath());
+                            if (file.exists()) {
+                                try{
+                                    android.os.RecoverySystem.installPackage(getApplicationContext(), file);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
                     }
                 }
             });
@@ -242,6 +264,13 @@ public class UpdatesActivity extends UpdatesListActivity {
                     Uri.parse(Utils.getChangelogURL(this)));
             startActivity(openUrl);
             return true;
+        } else if (itemId == R.id.menu_local_update) {
+            // Open file manager and let user select the update file
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            // Set type of file to zip
+            intent.setType("application/zip");
+
+            mLocalUpdate.launch(intent);
         }
         return super.onOptionsItemSelected(item);
     }
